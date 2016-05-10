@@ -1,6 +1,6 @@
 # API REST biometrico
 
-El presente proyecto utiliza JSON Web Token (JWT) para implementar el sistema de autenticacion y consulta basado en tokens para el servicio web entre el Banco Union y Adsib.
+El presente proyecto utiliza JSON Web Token (JWT).
 
 ## Guia rapida de instalacion de la API en local.
 
@@ -25,14 +25,10 @@ Para mas detalles, léase el archivo `INSTALL.md`
 
 Las siguientes rutas (endpoints) son protegias. Es decir, debe enviar el token en la cabecera: `x-access-token`
 
-- `http://test.agetic.gob.bo/banco-union-extractos/api/v1/depositos?inicio=2015-03-28&fin=2015-03-31`. 
+- `http://localhost:8080/api/v1/registros?inicio=2016-05-10`. 
 
-    Petición `GET`. Lista depositos realizados en un rango de fechas. Note el formato de las fechas (año-mes-dia).
+    Petición `GET`. Lista registros realizados mayores o iguales a la fecha especificada. Note el formato de las fechas (año-mes-dia).
 
-
-- `http://test.agetic.gob.bo/banco-union-extractos/api/v1/depositos/:numero`. 
-
-    Petición `GET`. Lista un deposito en particular, según el número de documento (numDocumento).
 
 
 
