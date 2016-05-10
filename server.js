@@ -128,18 +128,19 @@ apiRoutes.get('/', function(req, res) {
 	res.json({ mensaje: 'Bienvenido a la API!' });
 });
 
-//// Encontrar movimientos según una fecha de inicio y otra fecha final
-apiRoutes.get('/depositos', function(req,res){
-	model.movimiento.findAll({
-    attributes: ['fechaMovimiento', 'tipoMovimiento', 'fecLiteral', 'numDocumento', 'monto', 'detalle'],
+//// Encontrar registros desde una fecha x
+apiRoutes.get('/registros', function(req,res){
+	model.registro.findAll({
+    attributes: ['hora', 'dispositivo', 'id', 'fecha', 'usuario'],
 		where:{
-  		fechaMovimiento: {
-    		lte: req.query.fin,
-    		gte: req.query.inicio
-			}
-	}}).then(function(result) {
-		console.log(result);
-		res.json(result);
+            fecha:{
+                gte: req.query.inicio
+                }
+              }
+}).then(function(result) {
+		var groupedData = groupBy(result, ['fecha', 'usuario']);
+        res.json(groupedData);
+        
 	}).catch(function(error){
 		console.log(error);
 		res.status(400).json({mensaje: "Error en la petición. Revise los parámetros"});
@@ -272,6 +273,53 @@ app.use(function(err, req, res, next) {
     //next();
   }
 });
+
+////////////////////////
+/////////////function for nested json
+
+// "keys" is an array of properties to group on.
+function groupBy(data, keys) { 
+
+    if (keys.length == 0) return data;
+
+    // The current key to perform the grouping on:
+    var key = keys[0];
+
+    // Loop through the data and construct buckets for
+    // all of the unique keys:
+    var groups = {};
+    for (var i = 0; i < data.length; i++)
+    {
+        var row = data[i];
+        var groupValue = row[key];
+
+        if (groups[groupValue] == undefined)
+        {
+            groups[groupValue] = new Array();
+        }
+
+        groups[groupValue].push(row);
+    }
+
+    // Remove the first element from the groups array:
+    keys.reverse();
+    keys.pop()
+    keys.reverse();
+
+    // If there are no more keys left, we're done:
+    if (keys.length == 0) return groups;
+
+    // Otherwise, handle further groupings:
+    for (var group in groups)
+    {
+        groups[group] = groupBy(groups[group], keys.slice());
+    }
+
+    return groups;
+}
+
+
+
 // =================================================================
 // inicar el servidor ================================================
 // =================================================================
