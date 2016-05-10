@@ -138,8 +138,11 @@ apiRoutes.get('/registros', function(req,res){
                 }
               }
 }).then(function(result) {
-		var groupedData = groupBy(result, ['fecha', 'usuario']);
-        res.json(groupedData);
+		//var groupedData = groupBy(result, ['fecha', 'usuario']);
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA " + result)
+        var groupedData = groupBy(result, ['fecha', 'usuario']);
+        console.log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBB " + groupedData)
+        res.send(groupedData);
         
 	}).catch(function(error){
 		console.log(error);
